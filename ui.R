@@ -77,8 +77,13 @@ ui <- fluidPage(
                                h3("Ordinal Regression Model"),
                                verbatimTextOutput("modelSummary") %>% withSpinner(),
                                hr(),
+                               h4("Model comparison (AIC, lower is better)"),
                                tableOutput("modelCompare"),
                                hr(),
+                               h4("How well does it predict unseen wines?"),
+                               verbatimTextOutput("holdoutText"),
+                               hr(),
+                               h4("Variance inflation factors (all 11 predictors)"),
                                tableOutput("vifTable")
                         )
                       )
@@ -89,14 +94,15 @@ ui <- fluidPage(
                         column(4,
                                wellPanel(
                                  h4("Enter Wine Characteristics"),
-                                 sliderInput("alcohol","Alcohol (%)", 8,15, value=10),
-                                 sliderInput("volatile","Volatile Acidity",0,1,value=0.5),
-                                 sliderInput("sulphates","Sulphates",0,2,value=0.6),
-                                 sliderInput("citric","Citric Acid",0,1,value=0.3),
-                                 sliderInput("residual","Residual Sugar",0,10,value=2),
-                                 sliderInput("density","Density",0.990,1.005,value=0.996),
-                                 sliderInput("pH","pH",2.5,4.0,value=3.3),
-                                 sliderInput("chlorides","Chlorides",0,0.2,value=0.08),
+                                 helpText("Ranges match the dataset; defaults are the median wine.",
+                                          "These are the seven variables chosen by forward selection."),
+                                 sliderInput("alcohol","Alcohol (% vol)", 8.4, 14.9, value=10.2, step=0.1),
+                                 sliderInput("volatile","Volatile Acidity (g/L)", 0.12, 1.58, value=0.52, step=0.01),
+                                 sliderInput("sulphates","Sulphates (g/L)", 0.33, 2.0, value=0.62, step=0.01),
+                                 sliderInput("chlorides","Chlorides (g/L)", 0.012, 0.611, value=0.079, step=0.001),
+                                 sliderInput("pH","pH", 2.74, 4.01, value=3.31, step=0.01),
+                                 sliderInput("total_so2","Total Sulfur Dioxide (mg/L)", 6, 289, value=38, step=1),
+                                 sliderInput("free_so2","Free Sulfur Dioxide (mg/L)", 1, 72, value=14, step=1),
                                  actionButton("predict_btn","Predict Quality",
                                               class="btn btn-success btn-block")
                                )
